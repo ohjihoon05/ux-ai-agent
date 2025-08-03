@@ -34,39 +34,41 @@ export default function Header({ className = '' }: HeaderProps) {
   }
 
   return (
-    <header className={`bg-white shadow-sm ${className}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className={`glass-card mx-4 mt-4 ${className}`}>
+      <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Brain className="h-8 w-8 text-blue-600" />
-            <h1 className="ml-2 text-xl font-semibold text-gray-900">
+            <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl">
+              <Brain className="h-6 w-6 text-white" />
+            </div>
+            <h1 className="ml-3 text-xl font-bold text-white">
               UX Research AI
             </h1>
           </div>
           
-          <div className="flex items-center space-x-2 sm:space-x-6">
+          <div className="flex items-center space-x-4 sm:space-x-8">
             {/* AI 엔진 상태 */}
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="flex items-center space-x-1">
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2 px-3 py-1 bg-white/10 rounded-full">
                 {getStatusIcon(engineStatus?.['claude-code']?.available)}
-                <span className="hidden sm:inline text-xs text-gray-600">Claude</span>
+                <span className="hidden sm:inline text-xs text-white/90 font-medium">Claude</span>
               </div>
-              <div className="flex items-center space-x-1">
+              <div className="flex items-center space-x-2 px-3 py-1 bg-white/10 rounded-full">
                 {getStatusIcon(engineStatus?.ollama?.available)}
-                <span className="hidden sm:inline text-xs text-gray-600">Ollama</span>
+                <span className="hidden sm:inline text-xs text-white/90 font-medium">Ollama</span>
               </div>
             </div>
 
             {/* Navigation */}
-            <nav className="hidden md:flex space-x-4">
-              <a href="#" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                새 설문
+            <nav className="hidden md:flex space-x-2">
+              <a href="#" className="text-white/80 hover:text-white hover:bg-white/10 px-4 py-2 rounded-xl text-sm font-medium transition-all">
+                🆕 새 설문
               </a>
-              <a href="#" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                내 설문
+              <a href="#" className="text-white/80 hover:text-white hover:bg-white/10 px-4 py-2 rounded-xl text-sm font-medium transition-all">
+                📋 내 설문
               </a>
-              <a href="#" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                분석
+              <a href="#" className="text-white/80 hover:text-white hover:bg-white/10 px-4 py-2 rounded-xl text-sm font-medium transition-all">
+                📊 분석
               </a>
             </nav>
           </div>
