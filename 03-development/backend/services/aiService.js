@@ -1,5 +1,6 @@
 const claudeCodeService = require('./claudeCodeService');
 const ollamaService = require('./ollamaService');
+const logger = require('../utils/logger');
 
 class AIService {
   constructor() {

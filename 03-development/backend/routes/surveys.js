@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const aiService = require('../services/aiService');
+const databaseService = require('../services/databaseService');
 
 // AI 엔진 상태 확인
 router.get('/engines/status', async (req, res) => {
   try {
     const status = await aiService.getEngineStatus();
-    res.json({
-      success: true,
-      data: status
-    });
+    res.json(status); // 직접 반환 (테스트 호환성을 위해)
   } catch (error) {
     console.error('Engine status check failed:', error);
     res.status(500).json({
@@ -23,10 +21,7 @@ router.get('/engines/status', async (req, res) => {
 // 지원하는 AI 엔진 목록
 router.get('/engines', (req, res) => {
   const engines = aiService.getSupportedEngines();
-  res.json({
-    success: true,
-    data: engines
-  });
+  res.json(engines); // 직접 반환 (테스트 호환성을 위해)
 });
 
 // AI 설문 생성
@@ -39,6 +34,15 @@ router.post('/generate', async (req, res) => {
       return res.status(400).json({
         success: false,
         message: '설문 목적을 입력해주세요.'
+      });
+    }
+
+    // 엔진 검증
+    const supportedEngines = aiService.getSupportedEngines();
+    if (engine && !supportedEngines.includes(engine)) {
+      return res.status(400).json({
+        success: false,
+        message: `지원하지 않는 AI 엔진입니다. 지원 엔진: ${supportedEngines.join(', ')}`
       });
     }
 
@@ -57,7 +61,7 @@ router.post('/generate', async (req, res) => {
 
     res.json({
       success: result.success,
-      data: result.survey,
+      survey: result.survey,
       meta: {
         engine: result.engine,
         fallback: result.fallback || false,
@@ -198,6 +202,216 @@ router.post('/preview', (req, res) => {
     res.status(500).json({
       success: false,
       message: '미리보기 생성에 실패했습니다.',
+      error: error.message
+    });
+  }
+});
+
+// === 설문 CRUD API ===
+
+// 설문 목록 조회
+router.get('/', async (req, res) => {
+  try {
+    const { status, userId } = req.query;
+    const surveys = await databaseService.getSurveys(userId, status);
+    
+    res.json({
+      success: true,
+      data: surveys,
+      count: surveys.length
+    });
+  } catch (error) {
+    console.error('Failed to get surveys:', error);
+    res.status(500).json({
+      success: false,
+      message: '설문 목록 조회에 실패했습니다.',
+      error: error.message
+    });
+  }
+});
+
+// 설문 상세 조회
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const survey = await databaseService.getSurvey(id);
+    
+    res.json({
+      success: true,
+      data: survey
+    });
+  } catch (error) {
+    console.error('Failed to get survey:', error);
+    const statusCode = error.message.includes('not found') ? 404 : 500;
+    res.status(statusCode).json({
+      success: false,
+      message: '설문 조회에 실패했습니다.',
+      error: error.message
+    });
+  }
+});
+
+// 설문 저장
+router.post('/', async (req, res) => {
+  try {
+    const surveyData = req.body;
+    
+    // 필수 필드 검증
+    if (!surveyData.title || !surveyData.questions || !Array.isArray(surveyData.questions)) {
+      return res.status(400).json({
+        success: false,
+        message: '설문 제목과 질문이 필요합니다.'
+      });
+    }
+
+    const savedSurvey = await databaseService.saveSurvey(surveyData);
+    
+    res.status(201).json({
+      success: true,
+      data: savedSurvey,
+      message: '설문이 성공적으로 저장되었습니다.'
+    });
+  } catch (error) {
+    console.error('Failed to save survey:', error);
+    res.status(500).json({
+      success: false,
+      message: '설문 저장에 실패했습니다.',
+      error: error.message
+    });
+  }
+});
+
+// 설문 업데이트
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+    
+    const updatedSurvey = await databaseService.updateSurvey(id, updateData);
+    
+    res.json({
+      success: true,
+      data: updatedSurvey,
+      message: '설문이 성공적으로 업데이트되었습니다.'
+    });
+  } catch (error) {
+    console.error('Failed to update survey:', error);
+    const statusCode = error.message.includes('not found') ? 404 : 500;
+    res.status(statusCode).json({
+      success: false,
+      message: '설문 업데이트에 실패했습니다.',
+      error: error.message
+    });
+  }
+});
+
+// 설문 삭제
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await databaseService.deleteSurvey(id);
+    
+    res.json({
+      success: true,
+      message: '설문이 성공적으로 삭제되었습니다.'
+    });
+  } catch (error) {
+    console.error('Failed to delete survey:', error);
+    const statusCode = error.message.includes('not found') ? 404 : 500;
+    res.status(statusCode).json({
+      success: false,
+      message: '설문 삭제에 실패했습니다.',
+      error: error.message
+    });
+  }
+});
+
+// === 설문 응답 API ===
+
+// 설문 응답 제출
+router.post('/:id/responses', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const responseData = {
+      ...req.body,
+      surveyId: id,
+      userAgent: req.get('User-Agent'),
+      ipAddress: req.ip
+    };
+    
+    const savedResponse = await databaseService.saveResponse(responseData);
+    
+    res.status(201).json({
+      success: true,
+      data: savedResponse,
+      message: '응답이 성공적으로 제출되었습니다.'
+    });
+  } catch (error) {
+    console.error('Failed to save response:', error);
+    res.status(500).json({
+      success: false,
+      message: '응답 제출에 실패했습니다.',
+      error: error.message
+    });
+  }
+});
+
+// 설문 응답 목록 조회
+router.get('/:id/responses', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const responses = await databaseService.getResponses(id);
+    
+    res.json({
+      success: true,
+      data: responses,
+      count: responses.length
+    });
+  } catch (error) {
+    console.error('Failed to get responses:', error);
+    res.status(500).json({
+      success: false,
+      message: '응답 조회에 실패했습니다.',
+      error: error.message
+    });
+  }
+});
+
+// 설문 응답 통계
+router.get('/:id/stats', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const stats = await databaseService.getResponseStats(id);
+    
+    res.json({
+      success: true,
+      data: stats
+    });
+  } catch (error) {
+    console.error('Failed to get response stats:', error);
+    res.status(500).json({
+      success: false,
+      message: '통계 조회에 실패했습니다.',
+      error: error.message
+    });
+  }
+});
+
+// === 데이터베이스 상태 API ===
+
+// 데이터베이스 상태 확인
+router.get('/system/database', async (req, res) => {
+  try {
+    const status = await databaseService.getStatus();
+    res.json({
+      success: true,
+      data: status
+    });
+  } catch (error) {
+    console.error('Failed to get database status:', error);
+    res.status(500).json({
+      success: false,
+      message: '데이터베이스 상태 확인에 실패했습니다.',
       error: error.message
     });
   }
