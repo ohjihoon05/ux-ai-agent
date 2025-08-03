@@ -7,14 +7,15 @@ export interface ApiResponse<T> {
 
 // Survey Types
 export interface Survey {
-  id: string
+  id?: string
   title: string
   description: string
   questions: Question[]
-  createdAt: string
-  updatedAt: string
-  status: 'draft' | 'active' | 'closed'
+  createdAt?: string
+  updatedAt?: string
+  status?: 'draft' | 'active' | 'closed'
   responses?: SurveyResponse[]
+  suggestions?: string[]
 }
 
 export interface Question {

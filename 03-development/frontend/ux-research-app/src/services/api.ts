@@ -14,12 +14,17 @@ class ApiService {
       })
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        const errorData = await response.json().catch(() => null)
+        const errorMessage = errorData?.message || `HTTP error! status: ${response.status}`
+        throw new Error(errorMessage)
       }
 
       return await response.json()
     } catch (error) {
       console.error('API call failed:', error)
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        throw new Error('백엔드 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.')
+      }
       throw error
     }
   }

@@ -1,7 +1,7 @@
-import { LucideIcon } from 'lucide-react'
+import { type FC } from 'react'
 
 interface FeatureCardProps {
-  icon: LucideIcon
+  icon: FC<{ className?: string }>
   title: string
   description: string
   iconColor: string

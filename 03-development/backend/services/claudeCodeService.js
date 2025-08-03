@@ -71,7 +71,8 @@ JSON만 응답해주세요.
         .then(() => {
           exec(`claude < "${tempFile}"`, { 
             maxBuffer: 1024 * 1024, // 1MB buffer
-            timeout: 30000 // 30초 타임아웃
+            timeout: 60000, // 60초 타임아웃으로 증가
+            encoding: 'utf8'
           }, async (error, stdout, stderr) => {
             // 임시 파일 삭제
             try {
