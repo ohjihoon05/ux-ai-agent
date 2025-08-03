@@ -41,14 +41,35 @@ export interface Answer {
 // AI Generation Types
 export interface SurveyGenerationRequest {
   purpose: string
-  targetAudience: string
-  language: 'ko' | 'en'
-  questionCount?: number
+  targetAudience?: string
+  language?: 'ko' | 'en'
+  engine?: 'claude-code' | 'ollama'
+  model?: string
 }
 
 export interface SurveyGenerationResponse {
   survey: Omit<Survey, 'id' | 'createdAt' | 'updatedAt' | 'status'>
   suggestions?: string[]
+}
+
+// AI Engine Types
+export interface AIEngine {
+  id: string
+  name: string
+  description: string
+  pros: string[]
+  cons: string[]
+}
+
+export interface AIEngineStatus {
+  engines: Record<string, {
+    available: boolean
+    name: string
+    description: string
+    models?: string[]
+    error?: string
+  }>
+  recommended: string | null
 }
 
 // User Types

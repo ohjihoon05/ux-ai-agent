@@ -1,14 +1,20 @@
+import React, { useState } from 'react'
 import { Brain, FileQuestion, BarChart3 } from 'lucide-react'
 import Header from '../components/layout/Header'
 import FeatureCard from '../components/ui/FeatureCard'
 import Button from '../components/ui/Button'
+import SurveyGenerator from '../components/SurveyGenerator'
+import type { Survey } from '../types'
 
 export default function HomePage() {
+  const [showGenerator, setShowGenerator] = useState(false)
+  const [lastGeneratedSurvey, setLastGeneratedSurvey] = useState<Survey | null>(null)
+
   const features = [
     {
       icon: Brain,
       title: 'AI 설문 생성',
-      description: '리서치 목적을 입력하면 GPT-4가 자동으로 설문을 생성합니다',
+      description: 'Claude Code와 Ollama AI가 목적에 맞는 설문을 자동 생성합니다',
       iconColor: 'text-blue-600',
       iconBgColor: 'bg-blue-100'
     },
@@ -28,6 +34,10 @@ export default function HomePage() {
     }
   ]
 
+  const handleSurveyGenerated = (survey: Survey) => {
+    setLastGeneratedSurvey(survey)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -43,6 +53,50 @@ export default function HomePage() {
           </p>
         </div>
 
+        {/* CTA Buttons */}
+        <div className="text-center mb-12">
+          <div className="space-x-4">
+            <Button 
+              size="lg"
+              onClick={() => setShowGenerator(true)}
+            >
+              설문 만들기 시작
+            </Button>
+            {showGenerator && (
+              <Button 
+                variant="secondary"
+                size="lg"
+                onClick={() => setShowGenerator(false)}
+              >
+                닫기
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Survey Generator */}
+        {showGenerator && (
+          <div className="mb-16">
+            <SurveyGenerator onSurveyGenerated={handleSurveyGenerated} />
+          </div>
+        )}
+
+        {/* Recent Survey Preview */}
+        {lastGeneratedSurvey && (
+          <div className="mb-16 p-6 bg-white rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              ✨ 방금 생성된 설문
+            </h3>
+            <div className="space-y-2">
+              <h4 className="font-medium text-gray-800">{lastGeneratedSurvey.title}</h4>
+              <p className="text-gray-600">{lastGeneratedSurvey.description}</p>
+              <p className="text-sm text-gray-500">
+                총 {lastGeneratedSurvey.questions.length}개 문항
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Feature Cards */}
         <div className="grid md:grid-cols-3 gap-8 mt-12">
           {features.map((feature, index) => (
@@ -55,13 +109,6 @@ export default function HomePage() {
               iconBgColor={feature.iconBgColor}
             />
           ))}
-        </div>
-
-        {/* CTA Button */}
-        <div className="text-center mt-12">
-          <Button size="lg">
-            설문 만들기 시작
-          </Button>
         </div>
       </main>
     </div>

@@ -1,4 +1,4 @@
-import type { ApiResponse, Survey, SurveyGenerationRequest, SurveyGenerationResponse } from '../types'
+import type { ApiResponse, Survey, SurveyGenerationRequest, AIEngineStatus, AIEngine } from '../types'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'
 
@@ -24,16 +24,59 @@ class ApiService {
     }
   }
 
+  // AI Engine Management
+  async getAIEngines(): Promise<AIEngine[]> {
+    const response = await this.fetch<AIEngine[]>('/surveys/engines')
+    return response.data
+  }
+
+  async getAIEngineStatus(): Promise<AIEngineStatus> {
+    const response = await this.fetch<AIEngineStatus>('/surveys/engines/status')
+    return response.data
+  }
+
   // Survey Generation
-  async generateSurvey(request: SurveyGenerationRequest): Promise<SurveyGenerationResponse> {
-    const response = await this.fetch<SurveyGenerationResponse>('/surveys/generate', {
+  async generateSurvey(request: SurveyGenerationRequest): Promise<{
+    survey: Survey
+    meta: {
+      engine: string
+      fallback?: boolean
+      originalEngine?: string
+      error?: string
+    }
+  }> {
+    const response = await this.fetch<any>('/surveys/generate', {
       method: 'POST',
       body: JSON.stringify(request),
+    })
+    return {
+      survey: response.data,
+      meta: response.meta || {}
+    }
+  }
+
+  // Survey Templates
+  async getSurveyTemplates(): Promise<any[]> {
+    const response = await this.fetch<any[]>('/surveys/templates')
+    return response.data
+  }
+
+  // Survey Preview
+  async generateSurveyPreview(survey: Survey): Promise<{ html: string; url?: string }> {
+    const response = await this.fetch<{ html: string; url?: string }>('/surveys/preview', {
+      method: 'POST',
+      body: JSON.stringify({ survey }),
     })
     return response.data
   }
 
-  // Survey CRUD
+  // Health Check
+  async healthCheck(): Promise<{ status: string; timestamp: string; version: string }> {
+    const response = await this.fetch<{ status: string; timestamp: string; version: string }>('/health')
+    return response.data
+  }
+
+  // Survey CRUD (미래 확장용)
   async createSurvey(survey: Omit<Survey, 'id' | 'createdAt' | 'updatedAt'>): Promise<Survey> {
     const response = await this.fetch<Survey>('/surveys', {
       method: 'POST',
