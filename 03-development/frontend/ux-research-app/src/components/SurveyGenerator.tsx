@@ -45,8 +45,8 @@ const SurveyGenerator: React.FC<SurveyGeneratorProps> = ({ onSurveyGenerated }) 
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">AI 설문 생성</h2>
+    <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6">AI 설문 생성</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* 설문 목적 */}
