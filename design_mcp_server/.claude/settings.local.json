@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pwsh:*)",
+      "Read(//c/Users/ohjih/**)",
+      "Bash(git rev-parse:*)",
+      "Bash(powershell:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm install)",
+      "Bash(node:*)",
+      "Bash(curl:*)",
+      "Bash(tree:*)",
+      "Bash(sqlite3:*)",
+      "Bash(python:*)",
+      "Bash(cat:*)",
+      "Bash(npm run dev:vite:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

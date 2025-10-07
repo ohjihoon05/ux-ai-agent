@@ -1,0 +1,513 @@
+openapi: 3.0.3
+info:
+  title: Component Library API
+  description: REST API for Component Library Website
+  version: 1.0.0
+  contact:
+    name: Component Library Team
+    email: support@componentlib.com
+
+servers:
+  - url: http://localhost:3000/api
+    description: Development server
+  - url: https://components.company.com/api
+    description: Production server
+
+tags:
+  - name: Components
+    description: Component operations
+  - name: Design Systems
+    description: Design system management
+  - name: Presets
+    description: User preset management
+  - name: Analytics
+    description: Usage analytics
+  - name: Search
+    description: Component search
+
+paths:
+  /components:
+    get:
+      tags:
+        - Components
+      summary: List all components
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [buttons, cards, forms, navigation, modals, tables, layouts, feedback]
+        - name: style
+          in: query
+          schema:
+            type: string
+            enum: [glassmorphism, gradient, neomorphism, minimal, dark]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [name, usage, created, updated]
+            default: usage
+      responses:
+        '200':
+          description: List of components
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  components:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ComponentSummary'
+                  total:
+                    type: integer
+                  limit:
+                    type: integer
+                  offset:
+                    type: integer
+
+  /components/{id}:
+    get:
+      tags:
+        - Components
+      summary: Get component details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Component details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentDetail'
+        '404':
+          description: Component not found
+
+  /components/{id}/variants:
+    get:
+      tags:
+        - Components
+      summary: Get component variants
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Component variants
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  variants:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Variant'
+
+  /components/{id}/copy:
+    post:
+      tags:
+        - Components
+        - Analytics
+      summary: Track component copy action
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                variantId:
+                  type: integer
+                customizations:
+                  type: object
+      responses:
+        '200':
+          description: Copy tracked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  html:
+                    type: string
+                  css:
+                    type: string
+                  js:
+                    type: string
+        '404':
+          description: Component not found
+
+  /search:
+    get:
+      tags:
+        - Search
+      summary: Search components
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 2
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            maximum: 50
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ComponentSummary'
+                  total:
+                    type: integer
+                  query:
+                    type: string
+
+  /design-systems:
+    get:
+      tags:
+        - Design Systems
+      summary: List design systems
+      responses:
+        '200':
+          description: List of design systems
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  systems:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DesignSystem'
+
+    post:
+      tags:
+        - Design Systems
+      summary: Create design system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DesignSystemInput'
+      responses:
+        '201':
+          description: Design system created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DesignSystem'
+
+  /design-systems/{id}/activate:
+    put:
+      tags:
+        - Design Systems
+      summary: Activate design system
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Design system activated
+        '404':
+          description: Design system not found
+
+  /presets:
+    get:
+      tags:
+        - Presets
+      summary: List user presets
+      responses:
+        '200':
+          description: List of presets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  presets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Preset'
+
+    post:
+      tags:
+        - Presets
+      summary: Create preset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PresetInput'
+      responses:
+        '201':
+          description: Preset created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Preset'
+
+  /analytics/popular:
+    get:
+      tags:
+        - Analytics
+      summary: Get popular components
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [day, week, month, all]
+            default: week
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Popular components
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  components:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        component:
+                          $ref: '#/components/schemas/ComponentSummary'
+                        usageCount:
+                          type: integer
+                        trend:
+                          type: string
+                          enum: [up, down, stable]
+
+  /analytics/events:
+    post:
+      tags:
+        - Analytics
+      summary: Track analytics event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventType:
+                  type: string
+                  enum: [view, preview, copy, customize, search]
+                componentId:
+                  type: integer
+                variantId:
+                  type: integer
+                metadata:
+                  type: object
+              required:
+                - eventType
+      responses:
+        '201':
+          description: Event tracked
+        '400':
+          description: Invalid event data
+
+components:
+  schemas:
+    ComponentSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        previewImage:
+          type: string
+          format: base64
+        usageCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    ComponentDetail:
+      allOf:
+        - $ref: '#/components/schemas/ComponentSummary'
+        - type: object
+          properties:
+            html:
+              type: string
+            css:
+              type: string
+            js:
+              type: string
+            props:
+              type: object
+            variants:
+              type: array
+              items:
+                $ref: '#/components/schemas/Variant'
+
+    Variant:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        cssOverrides:
+          type: string
+        propsOverrides:
+          type: object
+        previewImage:
+          type: string
+          format: base64
+        usageCount:
+          type: integer
+
+    DesignSystem:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        colors:
+          type: object
+          properties:
+            primary:
+              type: string
+            secondary:
+              type: string
+            accent:
+              type: string
+            neutral:
+              type: string
+        typography:
+          type: object
+        spacing:
+          type: object
+        cssVariables:
+          type: string
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    DesignSystemInput:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        colors:
+          type: object
+        typography:
+          type: object
+        spacing:
+          type: object
+      required:
+        - name
+        - colors
+
+    Preset:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        config:
+          type: object
+        applicableComponents:
+          type: array
+          items:
+            type: integer
+        thumbnail:
+          type: string
+          format: base64
+        usageCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    PresetInput:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        config:
+          type: object
+        applicableComponents:
+          type: array
+          items:
+            type: integer
+      required:
+        - name
+        - config

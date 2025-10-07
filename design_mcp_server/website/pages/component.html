@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component Detail - Component Library</title>
+  <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 min-h-screen">
+  <!-- Navigation -->
+  <nav class="glass-nav sticky top-0 z-50 backdrop-blur-lg bg-white/30 border-b border-white/20">
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-8">
+          <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <a href="/">Component Library</a>
+          </h1>
+        </div>
+        <a href="/" class="text-gray-600 hover:text-purple-600 transition-colors">← 돌아가기</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Component Detail -->
+  <div class="container mx-auto px-6 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Preview Section -->
+      <div>
+        <div class="glass-card p-8 rounded-3xl mb-6">
+          <h3 class="text-lg font-semibold mb-4">미리보기</h3>
+          <div id="component-preview" class="bg-white/50 rounded-2xl p-8 min-h-[300px] flex items-center justify-center">
+            <!-- Live preview will be rendered here -->
+          </div>
+        </div>
+
+        <!-- Variants -->
+        <div class="glass-card p-6 rounded-3xl">
+          <h3 class="text-lg font-semibold mb-4">변형 (Variants)</h3>
+          <div id="variant-selector" class="flex flex-wrap gap-3">
+            <!-- Variants will be loaded here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Section -->
+      <div>
+        <div class="glass-card p-8 rounded-3xl">
+          <div class="flex items-center justify-between mb-6">
+            <h2 id="component-name" class="text-3xl font-bold">Component Name</h2>
+            <button id="copy-button" class="btn-gradient px-6 py-3 rounded-xl font-semibold text-white hover:shadow-lg transition-all">
+              📋 코드 복사
+            </button>
+          </div>
+
+          <p id="component-description" class="text-gray-600 mb-6">
+            Component description...
+          </p>
+
+          <!-- Code Tabs -->
+          <div class="mb-4">
+            <div class="flex space-x-2 border-b border-gray-200">
+              <button class="code-tab active" data-tab="html">HTML</button>
+              <button class="code-tab" data-tab="css">CSS</button>
+              <button class="code-tab" data-tab="js">JavaScript</button>
+            </div>
+          </div>
+
+          <!-- Code Content -->
+          <div class="relative">
+            <pre id="code-html" class="code-block active"><code class="language-html"><!-- HTML code --></code></pre>
+            <pre id="code-css" class="code-block hidden"><code class="language-css">/* CSS code */</code></pre>
+            <pre id="code-js" class="code-block hidden"><code class="language-javascript">// JavaScript code</code></pre>
+          </div>
+
+          <!-- Copy Success Message -->
+          <div id="copy-success" class="hidden mt-4 p-4 bg-green-100 text-green-800 rounded-xl">
+            ✓ 코드가 클립보드에 복사되었습니다!
+          </div>
+        </div>
+
+        <!-- Properties -->
+        <div class="glass-card p-6 rounded-3xl mt-6">
+          <h3 class="text-lg font-semibold mb-4">속성 (Props)</h3>
+          <div id="component-props" class="space-y-2">
+            <!-- Props will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/scripts/component-detail.js"></script>
+</body>
+</html>

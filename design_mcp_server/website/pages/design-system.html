@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System - Component Library</title>
+  <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 min-h-screen">
+  <!-- Navigation -->
+  <nav class="glass-nav sticky top-0 z-50 backdrop-blur-lg bg-white/30 border-b border-white/20">
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <a href="/">Component Library</a>
+        </h1>
+        <a href="/" class="text-gray-600 hover:text-purple-600 transition-colors">← 돌아가기</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Design System Manager -->
+  <div class="container mx-auto px-6 py-12">
+    <!-- Header -->
+    <div class="mb-8">
+      <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+        디자인 시스템 관리
+      </h2>
+      <p class="text-gray-600">회사 브랜드의 색상, 타이포그래피, 스페이싱을 설정하여 모든 컴포넌트에 일관성 있게 적용하세요</p>
+    </div>
+
+    <!-- System Selection & Actions -->
+    <div class="glass-card p-6 rounded-3xl mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-2">현재 디자인 시스템</label>
+          <select id="system-select" class="w-full px-4 py-2 rounded-xl border border-gray-300 bg-white">
+            <option value="">새 디자인 시스템 만들기...</option>
+          </select>
+        </div>
+        <div class="flex items-end space-x-2">
+          <button id="save-system-btn" class="flex-1 btn-gradient px-6 py-2 rounded-xl font-semibold text-white hover:shadow-lg transition-all">
+            💾 저장
+          </button>
+          <button id="export-system-btn" class="px-6 py-2 rounded-xl border-2 border-purple-500 text-purple-600 font-semibold hover:bg-purple-50 transition-all" disabled>
+            📤 내보내기
+          </button>
+          <button id="import-system-btn" class="px-6 py-2 rounded-xl border-2 border-gray-300 font-semibold hover:border-purple-500 transition-all">
+            📥 가져오기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Settings Panel -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- System Info -->
+        <div class="glass-card p-6 rounded-3xl">
+          <h3 class="text-xl font-semibold mb-4">시스템 정보</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-2">시스템 이름</label>
+              <input type="text" id="system-name" placeholder="예: 우리 회사 브랜드" class="w-full px-4 py-2 rounded-xl border border-gray-300 bg-white">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">설명</label>
+              <textarea id="system-description" placeholder="이 디자인 시스템에 대한 설명..." rows="2" class="w-full px-4 py-2 rounded-xl border border-gray-300 bg-white resize-none"></textarea>
+            </div>
+            <div class="flex items-center justify-between">
+              <label class="text-sm font-medium">활성화</label>
+              <button id="active-toggle" class="w-12 h-6 bg-gray-300 rounded-full relative transition-colors">
+                <span class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Brand Colors -->
+        <div class="glass-card p-6 rounded-3xl">
+          <h3 class="text-xl font-semibold mb-4 flex items-center">
+            🎨 브랜드 색상
+          </h3>
+          <div class="space-y-4" id="color-inputs">
+            <!-- Colors will be dynamically added here -->
+          </div>
+          <button id="add-color-btn" class="mt-4 w-full px-4 py-2 rounded-xl border-2 border-dashed border-gray-300 text-gray-600 hover:border-purple-500 hover:text-purple-600 transition-all">
+            + 색상 추가
+          </button>
+        </div>
+
+        <!-- Typography -->
+        <div class="glass-card p-6 rounded-3xl">
+          <h3 class="text-xl font-semibold mb-4 flex items-center">
+            🔤 타이포그래피
+          </h3>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-2">Font Family</label>
+              <input type="text" id="font-family" placeholder="예: 'Pretendard', sans-serif" class="w-full px-4 py-2 rounded-xl border border-gray-300 bg-white font-mono text-sm">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Font Sizes</label>
+              <div class="space-y-2" id="font-size-inputs">
+                <!-- Font sizes will be dynamically added here -->
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Line Heights</label>
+              <div class="space-y-2" id="line-height-inputs">
+                <!-- Line heights will be dynamically added here -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacing -->
+        <div class="glass-card p-6 rounded-3xl">
+          <h3 class="text-xl font-semibold mb-4 flex items-center">
+            📐 스페이싱
+          </h3>
+          <div class="space-y-2" id="spacing-inputs">
+            <!-- Spacing values will be dynamically added here -->
+          </div>
+          <button id="add-spacing-btn" class="mt-4 w-full px-4 py-2 rounded-xl border-2 border-dashed border-gray-300 text-gray-600 hover:border-purple-500 hover:text-purple-600 transition-all">
+            + 스페이싱 추가
+          </button>
+        </div>
+
+        <!-- Borders -->
+        <div class="glass-card p-6 rounded-3xl">
+          <h3 class="text-xl font-semibold mb-4 flex items-center">
+            ⬜ 보더
+          </h3>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-2">Border Radius</label>
+              <div class="space-y-2" id="border-radius-inputs">
+                <!-- Border radius values will be dynamically added here -->
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Border Width</label>
+              <div class="space-y-2" id="border-width-inputs">
+                <!-- Border width values will be dynamically added here -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shadows -->
+        <div class="glass-card p-6 rounded-3xl">
+          <h3 class="text-xl font-semibold mb-4 flex items-center">
+            ☁️ 그림자
+          </h3>
+          <div class="space-y-2" id="shadow-inputs">
+            <!-- Shadow values will be dynamically added here -->
+          </div>
+          <button id="add-shadow-btn" class="mt-4 w-full px-4 py-2 rounded-xl border-2 border-dashed border-gray-300 text-gray-600 hover:border-purple-500 hover:text-purple-600 transition-all">
+            + 그림자 추가
+          </button>
+        </div>
+      </div>
+
+      <!-- Preview Panel -->
+      <div>
+        <div class="glass-card p-6 rounded-3xl sticky top-24">
+          <h3 class="text-xl font-semibold mb-4">미리보기</h3>
+
+          <!-- CSS Variables Output -->
+          <div class="mb-4">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-sm font-medium">CSS Variables</label>
+              <button id="copy-css-btn" class="px-3 py-1 text-xs bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                📋 복사
+              </button>
+            </div>
+            <pre id="css-output" class="bg-gray-900 text-gray-100 p-4 rounded-xl overflow-x-auto text-xs font-mono max-h-[400px] overflow-y-auto"><code>/* CSS 변수가 여기에 표시됩니다 */</code></pre>
+          </div>
+
+          <!-- Component Preview -->
+          <div>
+            <label class="block text-sm font-medium mb-2">컴포넌트 적용 예시</label>
+            <div id="preview-container" class="bg-white/50 rounded-xl p-4 space-y-3">
+              <button class="preview-component w-full px-4 py-2 rounded-lg font-semibold text-white transition-all">
+                Button Preview
+              </button>
+              <div class="preview-component p-4 rounded-lg bg-white shadow">
+                <h4 class="font-semibold mb-2">Card Title</h4>
+                <p class="text-sm text-gray-600">Card content goes here</p>
+              </div>
+              <input type="text" class="preview-component w-full px-4 py-2 rounded-lg border" placeholder="Input Preview">
+            </div>
+          </div>
+
+          <!-- Apply to Components -->
+          <div class="mt-6">
+            <button id="apply-system-btn" class="w-full btn-gradient px-6 py-3 rounded-xl font-semibold text-white hover:shadow-lg transition-all" disabled>
+              ✨ 모든 컴포넌트에 적용
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save System Modal -->
+  <div id="save-system-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+    <div class="glass-card p-8 rounded-3xl max-w-md w-full mx-4">
+      <h3 class="text-2xl font-bold mb-4">디자인 시스템 저장</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">시스템 이름</label>
+          <input type="text" id="save-system-name" placeholder="예: 우리 회사 브랜드 v1" class="w-full px-4 py-2 rounded-xl border border-gray-300 bg-white">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">설명 (선택사항)</label>
+          <textarea id="save-system-description" placeholder="버전 정보나 변경사항..." rows="3" class="w-full px-4 py-2 rounded-xl border border-gray-300 bg-white resize-none"></textarea>
+        </div>
+        <div class="flex items-center justify-between">
+          <label class="text-sm font-medium">기본 시스템으로 설정</label>
+          <button id="save-active-toggle" class="w-12 h-6 bg-purple-600 rounded-full relative transition-colors">
+            <span class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform translate-x-6"></span>
+          </button>
+        </div>
+        <div class="flex space-x-3">
+          <button id="save-system-confirm" class="flex-1 btn-gradient px-6 py-3 rounded-xl font-semibold text-white hover:shadow-lg transition-all">
+            저장
+          </button>
+          <button id="save-system-cancel" class="flex-1 px-6 py-3 rounded-xl font-semibold border-2 border-gray-300 hover:border-purple-500 transition-all">
+            취소
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import Modal -->
+  <div id="import-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+    <div class="glass-card p-8 rounded-3xl max-w-md w-full mx-4">
+      <h3 class="text-2xl font-bold mb-4">디자인 시스템 가져오기</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">JSON 파일 업로드</label>
+          <input type="file" id="import-file" accept=".json" class="w-full px-4 py-2 rounded-xl border border-gray-300 bg-white">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">또는 JSON 붙여넣기</label>
+          <textarea id="import-json" placeholder='{"name": "My Design System", ...}' rows="6" class="w-full px-4 py-2 rounded-xl border border-gray-300 bg-white resize-none font-mono text-xs"></textarea>
+        </div>
+        <div class="flex space-x-3">
+          <button id="import-confirm" class="flex-1 btn-gradient px-6 py-3 rounded-xl font-semibold text-white hover:shadow-lg transition-all">
+            가져오기
+          </button>
+          <button id="import-cancel" class="flex-1 px-6 py-3 rounded-xl font-semibold border-2 border-gray-300 hover:border-purple-500 transition-all">
+            취소
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/scripts/design-system.js"></script>
+</body>
+</html>

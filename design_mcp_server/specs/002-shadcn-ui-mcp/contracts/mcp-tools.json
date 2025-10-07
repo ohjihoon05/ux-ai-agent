@@ -1,0 +1,414 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Component Library MCP Server Tools",
+  "description": "Tool definitions for the Component Library MCP Server",
+  "version": "1.0.0",
+  "tools": [
+    {
+      "name": "generate-component",
+      "description": "Generate a UI component with specified style and properties",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "componentType": {
+            "type": "string",
+            "enum": ["button", "card", "form", "navigation", "modal", "table", "hero", "footer"],
+            "description": "Type of component to generate"
+          },
+          "style": {
+            "type": "string",
+            "enum": ["glassmorphism", "gradient", "neomorphism", "minimal", "dark"],
+            "description": "Visual style to apply",
+            "default": "minimal"
+          },
+          "variant": {
+            "type": "string",
+            "enum": ["primary", "secondary", "outline", "ghost", "destructive"],
+            "description": "Component variant",
+            "default": "primary"
+          },
+          "props": {
+            "type": "object",
+            "description": "Component-specific properties",
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "Text content for the component"
+              },
+              "title": {
+                "type": "string",
+                "description": "Title for cards, modals, etc."
+              },
+              "size": {
+                "type": "string",
+                "enum": ["sm", "md", "lg", "xl"],
+                "default": "md"
+              },
+              "icon": {
+                "type": "string",
+                "description": "Icon name or SVG"
+              }
+            }
+          },
+          "customizations": {
+            "type": "object",
+            "description": "Custom style overrides",
+            "properties": {
+              "primaryColor": {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$",
+                "description": "Primary color in hex format"
+              },
+              "borderRadius": {
+                "type": "string",
+                "description": "Border radius (e.g., '8px', '1rem')"
+              },
+              "animation": {
+                "type": "boolean",
+                "description": "Enable animations",
+                "default": true
+              }
+            }
+          }
+        },
+        "required": ["componentType"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string",
+            "description": "Generated HTML code"
+          },
+          "css": {
+            "type": "string",
+            "description": "Generated CSS/TailwindCSS classes"
+          },
+          "js": {
+            "type": "string",
+            "description": "JavaScript code if needed"
+          },
+          "preview": {
+            "type": "string",
+            "description": "Preview URL or base64 image"
+          }
+        },
+        "required": ["html", "css"]
+      }
+    },
+    {
+      "name": "apply-design-system",
+      "description": "Apply company design system to all components",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Design system name"
+          },
+          "colors": {
+            "type": "object",
+            "properties": {
+              "primary": {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$"
+              },
+              "secondary": {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$"
+              },
+              "accent": {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$"
+              },
+              "neutral": {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$"
+              }
+            },
+            "required": ["primary"]
+          },
+          "typography": {
+            "type": "object",
+            "properties": {
+              "fontFamily": {
+                "type": "string",
+                "description": "Primary font family"
+              },
+              "fontSize": {
+                "type": "object",
+                "properties": {
+                  "base": {
+                    "type": "string",
+                    "default": "16px"
+                  },
+                  "scale": {
+                    "type": "number",
+                    "default": 1.25
+                  }
+                }
+              }
+            }
+          },
+          "spacing": {
+            "type": "object",
+            "properties": {
+              "unit": {
+                "type": "string",
+                "default": "4px"
+              },
+              "scale": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "default": [0.25, 0.5, 1, 2, 3, 4, 6, 8, 12, 16]
+              }
+            }
+          }
+        },
+        "required": ["name", "colors"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "cssVariables": {
+            "type": "string",
+            "description": "Generated CSS custom properties"
+          },
+          "tailwindConfig": {
+            "type": "object",
+            "description": "TailwindCSS configuration object"
+          },
+          "affectedComponents": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of updated component names"
+          }
+        },
+        "required": ["cssVariables"]
+      }
+    },
+    {
+      "name": "combine-layout",
+      "description": "Combine multiple components into a layout",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "layout": {
+            "type": "string",
+            "enum": ["grid", "flex", "hero-cta", "card-grid", "dashboard"],
+            "description": "Layout pattern to use"
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "props": {
+                  "type": "object"
+                },
+                "position": {
+                  "type": "string",
+                  "description": "Position in layout (e.g., 'header', 'main', 'sidebar')"
+                }
+              },
+              "required": ["type"]
+            },
+            "minItems": 1,
+            "maxItems": 10
+          },
+          "responsive": {
+            "type": "boolean",
+            "description": "Make layout responsive",
+            "default": true
+          },
+          "spacing": {
+            "type": "string",
+            "enum": ["tight", "normal", "loose"],
+            "default": "normal"
+          }
+        },
+        "required": ["layout", "components"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string",
+            "description": "Combined layout HTML"
+          },
+          "css": {
+            "type": "string",
+            "description": "Layout CSS"
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "html": {
+                  "type": "string"
+                },
+                "css": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Individual component code"
+          }
+        },
+        "required": ["html", "css", "components"]
+      }
+    },
+    {
+      "name": "search-components",
+      "description": "Search for components by name, category, or style",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["all", "buttons", "cards", "forms", "navigation", "modals", "tables", "layouts"],
+            "default": "all"
+          },
+          "style": {
+            "type": "string",
+            "enum": ["all", "glassmorphism", "gradient", "neomorphism", "minimal", "dark"],
+            "default": "all"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 10
+          }
+        },
+        "required": ["query"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "variants": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "usageCount": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "totalCount": {
+            "type": "integer"
+          }
+        },
+        "required": ["results", "totalCount"]
+      }
+    },
+    {
+      "name": "convert-figma",
+      "description": "Convert Figma design to component code (optional feature)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "figmaUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Figma file or frame URL"
+          },
+          "outputFormat": {
+            "type": "string",
+            "enum": ["html", "react", "vue"],
+            "default": "html"
+          },
+          "includeAnimations": {
+            "type": "boolean",
+            "default": true
+          },
+          "responsive": {
+            "type": "boolean",
+            "default": true
+          },
+          "useLibraryComponents": {
+            "type": "boolean",
+            "description": "Try to match with existing library components",
+            "default": true
+          }
+        },
+        "required": ["figmaUrl"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string"
+          },
+          "css": {
+            "type": "string"
+          },
+          "js": {
+            "type": "string"
+          },
+          "matchedComponents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "figmaLayer": {
+                  "type": "string"
+                },
+                "libraryComponent": {
+                  "type": "string"
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              }
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["html", "css"]
+      }
+    }
+  ]
+}

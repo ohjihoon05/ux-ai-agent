@@ -1,0 +1,28 @@
+{
+  "name": "component-library-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "website",
+    "mcp-server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:website\" \"npm run dev:mcp\"",
+    "dev:website": "cd website && npm run dev",
+    "dev:mcp": "cd mcp-server && npm run dev",
+    "build": "npm run build:website && npm run build:mcp",
+    "build:website": "cd website && npm run build",
+    "build:mcp": "cd mcp-server && npm run build",
+    "test": "npm run test:website && npm run test:mcp",
+    "test:website": "cd website && npm run test",
+    "test:mcp": "cd mcp-server && npm run test",
+    "db:init": "node website/src/db/init.js",
+    "db:seed": "node website/src/db/seed.js",
+    "db:reset": "rm -f database.sqlite && npm run db:init && npm run db:seed",
+    "db:backup": "node scripts/backup-database.js",
+    "db:stats": "node scripts/database-stats.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
