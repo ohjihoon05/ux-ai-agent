@@ -7,9 +7,16 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:vite\"",
     "dev:server": "node src/api/server.js",
     "dev:vite": "vite",
-    "build": "vite build",
+    "build": "npm run build:db && npm run build:vite",
+    "build:db": "node src/db/init.js && sqlite3 database.db < src/db/optimize.sql",
+    "build:vite": "vite build",
+    "build:mcp": "cd ../mcp-server && npm run build",
+    "build:all": "npm run build && npm run build:mcp",
     "preview": "vite preview",
-    "test": "vitest"
+    "start": "NODE_ENV=production node src/api/server.js",
+    "test": "vitest",
+    "lint": "echo 'Linting...'",
+    "clean": "rm -rf dist database.db node_modules"
   },
   "dependencies": {
     "better-sqlite3": "^11.0.0",

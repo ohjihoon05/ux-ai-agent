@@ -4,6 +4,8 @@
  */
 
 import { $, $$, createElement, showToast, debounce } from './utils.js';
+import { showLoading, hideLoading, showSkeleton } from './loading.js';
+import { tryCatch, safeFetch } from './error-boundary.js';
 
 // State
 let currentCategory = 'all';

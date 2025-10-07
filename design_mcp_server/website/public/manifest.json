@@ -1,0 +1,104 @@
+{
+  "name": "Component Library - Modern UI Components",
+  "short_name": "Component Library",
+  "description": "Browse, preview, and copy modern UI components with glassmorphism, gradients, and more",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#667eea",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["development", "productivity", "design"],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Homepage with component gallery"
+    },
+    {
+      "src": "/screenshots/customize.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Real-time component customization"
+    },
+    {
+      "src": "/screenshots/design-system.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Design system management"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse Components",
+      "short_name": "Browse",
+      "description": "View all available components",
+      "url": "/?category=all",
+      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Customize",
+      "short_name": "Customize",
+      "description": "Customize component styles",
+      "url": "/pages/customize.html",
+      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Design System",
+      "short_name": "Design System",
+      "description": "Manage brand design system",
+      "url": "/pages/design-system.html",
+      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
+    }
+  ]
+}

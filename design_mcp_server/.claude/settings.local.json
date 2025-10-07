@@ -16,7 +16,9 @@
       "Bash(npm run dev:vite:*)",
       "Bash(npm run build:*)",
       "Bash(npm run:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
