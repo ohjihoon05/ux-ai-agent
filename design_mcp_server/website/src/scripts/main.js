@@ -6,6 +6,7 @@
 import { $, $$, createElement, showToast, debounce } from './utils.js';
 import { showLoading, hideLoading, showSkeleton } from './loading.js';
 import { tryCatch, safeFetch } from './error-boundary.js';
+import { ThemeManager } from './theme/theme-manager.js';
 
 // State
 let currentCategory = 'all';
@@ -18,6 +19,13 @@ async function init() {
   console.log('🚀 Initializing Component Library...');
 
   try {
+    // Initialize theme system
+    const initialTheme = ThemeManager.initialize();
+    console.log('🎨 Theme initialized:', initialTheme);
+
+    // Update toggle icon based on initial theme
+    updateThemeToggleIcon(initialTheme);
+
     // Load categories
     await loadCategories();
 
@@ -266,13 +274,23 @@ function setupEventListeners() {
  * Toggle dark/light theme
  */
 function toggleTheme() {
-  document.body.classList.toggle('dark');
-  const isDark = document.body.classList.contains('dark');
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  const newTheme = ThemeManager.toggleTheme();
+  updateThemeToggleIcon(newTheme);
+}
 
-  const toggle = $('#theme-toggle');
-  if (toggle) {
-    toggle.textContent = isDark ? '☀️' : '🌙';
+/**
+ * Update theme toggle button icon and ARIA attributes
+ * @param {('light'|'dark')} theme - Current theme
+ */
+function updateThemeToggleIcon(theme) {
+  const toggleButton = $('#theme-toggle');
+  const iconSpan = $('#theme-icon');
+
+  if (toggleButton && iconSpan) {
+    const isDark = theme === 'dark';
+    iconSpan.textContent = isDark ? '☀️' : '🌙';
+    toggleButton.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+    toggleButton.title = isDark ? '라이트 모드로 전환' : '다크 모드로 전환';
   }
 }
 

@@ -1,0 +1,53 @@
+/**
+ * Theme-Independent Design Tokens
+ *
+ * These values remain constant across all themes.
+ * For theme-specific values, see light.css and dark.css
+ */
+
+:root {
+  /* Spacing Scale */
+  --spacing-unit: 0.25rem;  /* 4px base unit */
+  --spacing-xs: calc(var(--spacing-unit) * 1);   /* 4px */
+  --spacing-sm: calc(var(--spacing-unit) * 2);   /* 8px */
+  --spacing-md: calc(var(--spacing-unit) * 4);   /* 16px */
+  --spacing-lg: calc(var(--spacing-unit) * 6);   /* 24px */
+  --spacing-xl: calc(var(--spacing-unit) * 8);   /* 32px */
+  --spacing-2xl: calc(var(--spacing-unit) * 12); /* 48px */
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;   /* 4px */
+  --radius-md: 0.5rem;    /* 8px */
+  --radius-lg: 1rem;      /* 16px */
+  --radius-xl: 1.5rem;    /* 24px */
+  --radius-2xl: 2rem;     /* 32px */
+  --radius-full: 9999px;  /* Fully rounded */
+
+  /* Animation Durations */
+  --animation-duration-fast: 150ms;
+  --animation-duration-normal: 300ms;
+  --animation-duration-slow: 500ms;
+
+  /* Easing Functions */
+  --animation-easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-easing-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* Complete Transitions */
+  --transition-smooth: all var(--animation-duration-normal) var(--animation-easing-smooth);
+
+  /* Theme-specific transition (colors only for performance) */
+  --transition-theme: background-color var(--animation-duration-normal) var(--animation-easing-smooth),
+                       color var(--animation-duration-normal) var(--animation-easing-smooth),
+                       border-color var(--animation-duration-normal) var(--animation-easing-smooth);
+
+  /* Z-Index Scale */
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+}
