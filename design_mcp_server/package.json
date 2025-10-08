@@ -13,6 +13,7 @@
     "build": "npm run build:website && npm run build:mcp",
     "build:website": "cd website && npm run build",
     "build:mcp": "cd mcp-server && npm run build",
+    "start": "cd website && npm run start",
     "test": "npm run test:website && npm run test:mcp",
     "test:website": "cd website && npm run test",
     "test:mcp": "cd mcp-server && npm run test",
@@ -20,7 +21,14 @@
     "db:seed": "node website/src/db/seed.js",
     "db:reset": "rm -f database.sqlite && npm run db:init && npm run db:seed",
     "db:backup": "node scripts/backup-database.js",
-    "db:stats": "node scripts/database-stats.js"
+    "db:stats": "node scripts/database-stats.js",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:restart": "docker-compose restart",
+    "docker:dev": "docker-compose --profile dev up dev",
+    "docker:clean": "docker-compose down -v && docker system prune -f"
   },
   "devDependencies": {
     "concurrently": "^8.2.0"

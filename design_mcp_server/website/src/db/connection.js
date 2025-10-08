@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Default database path (can be overridden by environment variable)
-const DATABASE_PATH = process.env.DATABASE_PATH || resolve(__dirname, '../../../database.sqlite');
+const DATABASE_PATH = process.env.DATABASE_PATH || resolve(__dirname, '../../database.db');
 
 // Connection pool configuration
 const MAX_CONNECTIONS = 5;

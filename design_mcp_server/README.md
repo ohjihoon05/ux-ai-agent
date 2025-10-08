@@ -16,7 +16,28 @@ Modern UI component library with AI-powered MCP server for seamless component ge
 
 ## 🚀 빠른 시작
 
-### 웹사이트만 사용 (가장 간단)
+### 방법 1: Docker 사용 (가장 간단) 🐳
+
+```bash
+# Docker Compose로 한 번에 실행
+docker-compose up -d
+
+# 브라우저 접속
+# Frontend: http://localhost:3000
+# API: http://localhost:3001/api/health
+
+# 로그 확인
+docker-compose logs -f
+
+# 중지
+docker-compose down
+```
+
+**상세 가이드**: [DOCKER.md](DOCKER.md)
+
+---
+
+### 방법 2: 로컬에서 직접 실행
 
 ```bash
 # 1. 데이터베이스 초기화
@@ -140,10 +161,12 @@ Claude Code:
 
 ## 🎓 가이드 문서
 
-1. **[CLAUDE_CODE_SETUP.md](CLAUDE_CODE_SETUP.md)** ⭐ 추천!
-2. **[CLAUDE_DESKTOP_SETUP.md](CLAUDE_DESKTOP_SETUP.md)**
-3. **[MCP_TEST_REPORT.md](MCP_TEST_REPORT.md)** - 테스트 결과
-4. **[mcp-server/README.md](mcp-server/README.md)** - MCP 상세
+1. **[DOCKER.md](DOCKER.md)** 🐳 Docker 배포 가이드 (신규!)
+2. **[CLAUDE_CODE_SETUP.md](CLAUDE_CODE_SETUP.md)** ⭐ 추천!
+3. **[CLAUDE_DESKTOP_SETUP.md](CLAUDE_DESKTOP_SETUP.md)**
+4. **[DEPLOY.md](DEPLOY.md)** - 프로덕션 배포
+5. **[MCP_TEST_REPORT.md](MCP_TEST_REPORT.md)** - 테스트 결과
+6. **[mcp-server/README.md](mcp-server/README.md)** - MCP 상세
 
 ---
 
@@ -226,10 +249,12 @@ Claude Code:
 
 - **Frontend**: Vanilla JS, TailwindCSS 3.x
 - **Build**: Vite 5.x
-- **Database**: SQLite (better-sqlite3)
+- **Database**: SQLite (better-sqlite3, WAL mode)
 - **Search**: FTS5
-- **API**: Node.js HTTP
+- **API**: Express.js + Security Middleware (Helmet, CORS, Rate Limiting)
 - **MCP**: @modelcontextprotocol/sdk
+- **Container**: Docker + Docker Compose 🐳
+- **PWA**: Service Worker, Manifest
 
 ---
 

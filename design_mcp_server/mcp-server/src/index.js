@@ -19,6 +19,7 @@ import { generateComponentTool } from './tools/generate-component.js';
 import { searchComponentsTool } from './tools/search-components.js';
 import { applyDesignSystemTool } from './tools/apply-design-system.js';
 import { combineLayoutTool } from './tools/combine-layout.js';
+import { convertFigma, convertFigmaToolDefinition } from './tools/convert-figma.js';
 
 // Import shared utilities
 import { initDatabase } from './db/connection.js';
@@ -54,6 +55,7 @@ async function main() {
           searchComponentsTool.definition,
           applyDesignSystemTool.definition,
           combineLayoutTool.definition,
+          convertFigmaToolDefinition,
         ],
       };
     });
@@ -76,6 +78,17 @@ async function main() {
 
           case 'combine-layout':
             return await combineLayoutTool.handler(args);
+
+          case 'convert-figma':
+            const result = await convertFigma(args);
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: JSON.stringify(result, null, 2),
+                },
+              ],
+            };
 
           default:
             throw new Error(`Unknown tool: ${name}`);
